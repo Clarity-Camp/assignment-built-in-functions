@@ -1,100 +1,93 @@
 
-// import { Clarinet, Tx, Chain, Account, types } from 'https://deno.land/x/clarinet@v0.31.0/index.ts';
-// import { assertEquals, assertStringIncludes } from 'https://deno.land/std@0.90.0/testing/asserts.ts';
+import { Clarinet, Tx, Chain, Account, types } from 'https://deno.land/x/clarinet@v0.31.0/index.ts';
+import { assertEquals, assertStringIncludes } from 'https://deno.land/std@0.90.0/testing/asserts.ts';
 
-// const TUPLE_INPUT_1 = types.tuple({
-//     id: types.uint(1), 
-//     employee: types.tuple({
-//         name: types.ascii("Stacker"), 
-//         city: types.ascii("Windy City"), 
-//         language: types.ascii("Python"), 
-//         clubs: types.list([
-//                     types.tuple({id: types.uint(10), name: types.ascii("Club 1")}),
-//                     types.tuple({id: types.uint(20), name: types.ascii("Club 2")}),
-//                     types.tuple({id: types.uint(30), name: types.ascii("Club 3")}),
-//                 ])
-//     })
-// })
+Clarinet.test({
+    name: "get-employee-name-from-tuple",
+    async fn(chain: Chain, accounts: Map<string, Account>) {
+        const deployer = accounts.get("deployer")!.address
 
-// const TUPLE_INPUT_2 = types.tuple({
-//     id: types.uint(1), 
-//     employee: types.tuple({
-//         name: types.ascii("Stacker"), 
-//         city: types.ascii("Windy City"), 
-//         language: types.ascii("Python"), 
-//         clubs: types.list([
-//                     types.tuple({id: types.uint(10), name: types.ascii("Club 1")}),
-//                 ])
-//     })
-// })
+        let block = chain.mineBlock([
+            Tx.contractCall(
+                "practice-tuple",
+                "get-employee-name-from-tuple",
+                [],
+                deployer    
+            )
+        ]);
+        assertEquals(block.receipts.length, 1);
+        assertEquals(block.height, 2);
 
-// Clarinet.test({
-//     name: "get-employee-2nd-club-name-from-tuple: Input 1 ",
-//     async fn(chain: Chain, accounts: Map<string, Account>) {
-//         const deployer = accounts.get("deployer")!.address
+        const result = block.receipts[0].result
+        result.expectOk().expectAscii("Stacker")
+    },
+});
 
-//         let block = chain.mineBlock([
-//             Tx.contractCall(
-//                 "practice-tuple",
-//                 "get-employee-2nd-club-name-from-tuple",
-//                 [TUPLE_INPUT_2],
-//                 deployer    
-//             )
-//         ]);
-//         assertEquals(block.receipts.length, 1);
-//         assertEquals(block.height, 2);
+Clarinet.test({
+    name: "get-employee-2nd-club-name-from-tuple",
+    async fn(chain: Chain, accounts: Map<string, Account>) {
+        const deployer = accounts.get("deployer")!.address
 
-//         const result = block.receipts[0].result
-//         result.expectOk().expectSome()
+        let block = chain.mineBlock([
+            Tx.contractCall(
+                "practice-tuple",
+                "get-employee-2nd-club-name-from-tuple",
+                [],
+                deployer    
+            )
+        ]);
+        assertEquals(block.receipts.length, 1);
+        assertEquals(block.height, 2);
 
-//         assertEquals(result, `(ok (some {id: u20, name: "Club 2"}))`)
-//     },
-// });
+        const result = block.receipts[0].result
+        result.expectOk().expectSome()
 
-// Clarinet.test({
-//     name: "get-employee-2nd-club-name-from-tuple: Input 2 ",
-//     async fn(chain: Chain, accounts: Map<string, Account>) {
-//         const deployer = accounts.get("deployer")!.address
+        assertEquals(result, `(ok (some {id: u20, name: "Club 2"}))`)
+    },
+});
 
-//         let block = chain.mineBlock([
-//             Tx.contractCall(
-//                 "practice-tuple",
-//                 "get-employee-2nd-club-name-from-tuple",
-//                 [TUPLE_INPUT_1],
-//                 deployer    
-//             )
-//         ]);
-//         assertEquals(block.receipts.length, 1);
-//         assertEquals(block.height, 2);
+Clarinet.test({
+    name: "set-new-language-for-employee-in-tuple",
+    async fn(chain: Chain, accounts: Map<string, Account>) {
+        const deployer = accounts.get("deployer")!.address
 
-//         const result = block.receipts[0].result
-//         result.expectOk().expectNone()
+        let block = chain.mineBlock([
+            Tx.contractCall(
+                "practice-tuple",
+                "set-new-language-for-employee-in-tuple",
+                [],
+                deployer    
+            )
+        ]);
+        assertEquals(block.receipts.length, 1);
+        assertEquals(block.height, 2);
 
-//         assertEquals(result, `(ok none)`)
-//     },
-// });
+        const result = block.receipts[0].result
+        result.expectOk().expectTuple()
 
+        assertStringIncludes(result, `language: "PythonBuidl"`)
+    },
+});
 
-// Clarinet.test({
-//     name: "set-new-language-for-employee-in-tuple: Input 2",
-//     async fn(chain: Chain, accounts: Map<string, Account>) {
-//         const deployer = accounts.get("deployer")!.address
+Clarinet.test({
+    name: "add-new-club-to-employee-in-tuple",
+    async fn(chain: Chain, accounts: Map<string, Account>) {
+        const deployer = accounts.get("deployer")!.address
 
-//         let block = chain.mineBlock([
-//             Tx.contractCall(
-//                 "practice-tuple",
-//                 "set-new-language-for-employee-in-tuple",
-//                 [TUPLE_INPUT_1],
-//                 deployer    
-//             )
-//         ]);
-//         assertEquals(block.receipts.length, 1);
-//         assertEquals(block.height, 2);
+        let block = chain.mineBlock([
+            Tx.contractCall(
+                "practice-tuple",
+                "add-new-club-to-employee-in-tuple",
+                [],
+                deployer    
+            )
+        ]);
+        assertEquals(block.receipts.length, 1);
+        assertEquals(block.height, 2);
 
-//         const result = block.receipts[0].result
-//         result.expectOk().expectTuple()
+        const result = block.receipts[0].result
+        result.expectOk().expectTuple()
 
-//         assertStringIncludes(result, `language: "PythonBuidl"`)
-//     },
-// });
-
+        assertStringIncludes(result, `{id: u40, name: "Club 4"}`)
+    },
+});
