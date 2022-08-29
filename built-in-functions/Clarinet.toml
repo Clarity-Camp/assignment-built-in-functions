@@ -8,6 +8,12 @@ boot_contracts = ["pox", "costs-v2", "bns"]
 
 [project.cache_location]
 path = ".requirements"
+[contracts.example]
+path = "contracts/example.clar"
+
+[contracts.practice-contract-calls]
+path = "contracts/practice-contract-calls.clar"
+
 [contracts.practice-map-keyword]
 path = "contracts/practice-map-keyword.clar"
 
