@@ -71,7 +71,7 @@ Clarinet.test({
 
 
 Clarinet.test({
-    name: "read-employee-status of employee at the block height",
+    name: "read-employee-status: of employee at the block height",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const deployer = accounts.get("deployer")!.address
 
@@ -102,7 +102,7 @@ Clarinet.test({
 });
 
 Clarinet.test({
-    name: "read-employee-status of employee at the block height",
+    name: "read-employee-status: of employee at the block height",
     async fn(chain: Chain, accounts: Map<string, Account>) {
         const deployer = accounts.get("deployer")!.address
 
