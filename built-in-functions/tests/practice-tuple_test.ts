@@ -19,7 +19,7 @@ Clarinet.test({
         assertEquals(block.height, 2);
 
         const result = block.receipts[0].result
-        result.expectOk().expectSome()
+        result.expectOk();
 
         assertEquals(result, `(ok "Club 2")`)
     },
