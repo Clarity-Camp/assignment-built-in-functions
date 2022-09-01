@@ -21,7 +21,7 @@ Clarinet.test({
         const result = block.receipts[0].result
         result.expectOk().expectSome()
 
-        assertEquals(result, `(ok (some {id: u20, name: "Club 2"}))`)
+        assertEquals(result, `(ok "Club 2")`)
     },
 });
 
